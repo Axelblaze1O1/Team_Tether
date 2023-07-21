@@ -106,15 +106,25 @@ def deleteMessage(request,pk):
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
+    # if request.method == 'POST':
+    #     form = RoomForm(request.POST)
+    #     if form.is_valid():
+    #         room = form.save(coomit=False)
+    #         room.host = request.user
+    #         room.save()
+    #         return redirect('home')
+    
     if request.method == 'POST':
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            room = form.save(coomit=False)
-            room.host = request.user
-            room.save()
-            return redirect('home')
+        room_name = request.POST.get('room_name')
+        topic = request.POST.get('topic')
+        room_about = request.POST.get('room_about')
+        topic_obj = Topic(name=topic)
+        topic_obj.save()
+        room_obj = Room(topic=topic_obj,host=request.user,name=room_name,description=room_about)
+        room_obj.save()
+        return redirect('home')
 
-    context = {'form' : form}
+    context = {}
     return render(request, 'base/room_form.html',context)
 
 @login_required(login_url='login')
