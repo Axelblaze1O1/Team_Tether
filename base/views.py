@@ -91,6 +91,20 @@ def room(request,pk):
     context = {'room' : room , 'rmessages':rmessages, 'participants':participants}
     return render(request, 'base/room.html' , context)
 
+def topics(request):
+    if request.GET.get('q') != None:
+        q = request.GET.get('q')
+    else:
+        q = ''
+    topics = Topic.objects.filter(Q(name__icontains=q))
+    context = {'topics':topics}
+    return render(request,'base/topics.html', context)
+
+def feed(request):
+    room_messages = Message.objects.all()
+    context = {'room_messages' : room_messages}
+    return render(request,'base/activity.html', context)
+
 @login_required(login_url='login')
 def deleteMessage(request,pk):
     message = Message.objects.get(id=pk)
