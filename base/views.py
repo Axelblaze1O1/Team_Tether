@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from .models import Room , Topic,Message
-from .forms import RoomForm
+from .forms import RoomForm , UserForm
 # Create your views here.
 def loginPage(request):
     page = 'login'
@@ -130,18 +130,28 @@ def createRoom(request):
 @login_required(login_url='login')
 def updateRoom(request,pk):
     room = Room.objects.get(id=pk)
-    form = RoomForm(instance=room)
+    room_name = room.name
+    topic = room.topic
+    about = room.description
 
     if request.user!=room.host:
         return HttpResponse('You are not allowed here')
 
     if request.method=='POST':
-        form = RoomForm(request.POST,instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    context = {'form' : form}
-    return render(request, 'base/room_form.html',context)
+        room_name = request.POST.get('room_name')
+        topic = request.POST.get('topic')
+        room_about = request.POST.get('room_about')
+        room.name = room_name
+        topic_obj = room.topic
+        topic_obj.name = topic
+        topic_obj.save()
+        room.topic = topic_obj
+        room.description = room_about
+        room.save()
+        return redirect('home')
+        
+    context = {'room':room,'room_name':room_name,'topic':topic,'about':about}
+    return render(request, 'base/room_form_update.html',context)
 
 @login_required(login_url='login')
 def deleteRoom(request,pk):
@@ -154,3 +164,16 @@ def deleteRoom(request,pk):
         room.delete()
         return redirect('home')
     return render(request,'base/delete.html', {'obj':room})
+
+@login_required(login_url='login')
+def profileUpdate(request,pk):
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method=='POST':
+        form = UserForm(request.POST,instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile',pk=user.id)
+    context = {'user':user,'form':form}
+    return render(request,'base/profile_update.html',context)

@@ -3,28 +3,48 @@
 
 {% block content %}
 
-<h1>{{user.username}}</h1>
-
-<style>
-    .profile-container{
-        display: grid;
-        grid-template-columns: 1fr 3fr 1fr;
-    }
-</style>
-
-<div class="profile-container">
-    <div>
-        {% include 'base\topics_comp.html' %}
-    </div>
-
-    <div>
-        {% include 'base\display_room.html' %}
-    </div>
+<main class="profile-page layout layout--3">
+    <div class="container">
         
-    <div>
+        {% include 'base\topics_comp.html' %}
+        
+        
+        <div class="roomList">
+            <div class="profile">
+              <div class="profile__avatar">
+                <div class="avatar avatar--large active">
+                  <img src="https://randomuser.me/api/portraits/men/{{user.id}}.jpg" />
+                </div>
+              </div>
+              <div class="profile__info">
+                <h3>{{user}}</h3>
+                <p>@{{user}}</p>
+                {% if request.user.id == user.id %}
+                <a href="{% url 'updateUser' user.id%}" class="btn btn--main btn--pill">Edit Profile</a>
+                {% endif %}
+            </div>
+              <div class="profile__about">
+                <h3></h3>
+                <p>
+                 
+                </p>
+              </div>
+            </div>
+    
+            <div class="roomList__header">
+              <div>
+                <h2>Study Rooms Hosted by {{user}}</a>
+                </h2>
+              </div>
+            </div>
+        
+
+        {% include 'base\display_room.html' %}
+        </div>
+
         {% include 'base\feed_comp.html' %}
-
     </div>
-</div>
+</main>
 
-{% endblock content %}
+{% endblock content %} 
+

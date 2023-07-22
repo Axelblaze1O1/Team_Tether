@@ -23,7 +23,7 @@
                 </path>
               </svg>
             </a>
-            <h3>Create Room</h3>
+            <h3>Update Room</h3>
           </div>
         </div>
         <div class="layout__body">
@@ -31,30 +31,24 @@
             {% csrf_token %}
             <div class="form__group">
               <label for="room_name">Room Name</label>
-              <input id="room_name" name="room_name" type="text" placeholder="E.g. Mastering Python + Django" />
+              <textarea id="room_name" name="room_name" class="article-input" type="text" rows="1" >{{room_name}}</textarea>
             </div>
 
             <div class="form__group">
-              <label for="room_topic">Topic</label>
-              <input required type="text" name="topic" id="room_topic" list="topic-list" />
-              <datalist id="topic-list">
-                <select id="room_topic">
-                  <option value="">Select your topic</option>
-                  <option value="Python">Python</option>
-                  <option value="Django">Django</option>
-                </select>
-              </datalist>
+              <label for="room_topic">Topic</label>           
+              <textarea name="topic" id="room_topic" class="article-input" type="text" rows="1" >{{topic}}</textarea>
+            </div>
 
             </div>
 
 
             <div class="form__group">
               <label for="room_about">About</label>
-              <textarea name="room_about" id="room_about" placeholder="Write about your group"></textarea>
+              <textarea name="room_about" class="article-input" id="room_about" type="text" rows="9" >{{about}}</textarea>
             </div>
             <div class="form__action">
               <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
-              <button class="btn btn--main" type="submit">Create Room</button>
+              <button class="btn btn--main" type="submit">Update Room</button>
             </div>
           </form>
         </div>
