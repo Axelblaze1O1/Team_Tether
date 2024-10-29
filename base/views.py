@@ -76,20 +76,42 @@ def userProfile(request,pk):
     return render(request, 'base/profile.html', context)
 
 def room(request,pk):
+    # room = Room.objects.get(id=pk)
+    # rmessages = room.message_set.all().order_by('-created')
+    # participants = room.participants.all()
+    # if request.method == 'POST':
+    #     message = Message.objects.create(
+    #         user = request.user,
+    #         room = room,
+    #         body = request.POST.get("body")
+    #     )
+    #     room.participants.add(request.user)
+    #     return redirect('room', pk=room.id)
+
+    # context = {'room' : room , 'rmessages':rmessages, 'participants':participants}
+    # return render(request, 'base/room.html' , context)
+ 
     room = Room.objects.get(id=pk)
     rmessages = room.message_set.all().order_by('-created')
     participants = room.participants.all()
     if request.method == 'POST':
         message = Message.objects.create(
-            user = request.user,
-            room = room,
-            body = request.POST.get("body")
+            user=request.user,
+            room=room,
+            body=request.POST.get("body")
         )
         room.participants.add(request.user)
         return redirect('room', pk=room.id)
 
-    context = {'room' : room , 'rmessages':rmessages, 'participants':participants}
-    return render(request, 'base/room.html' , context)
+    context = {
+        'room': room,
+        'rmessages': rmessages,
+        'participants': participants,
+        'room_name': pk,
+        'username': request.user.username,
+    }
+    return render(request, 'base/room.html', context)
+
 
 def topics(request):
     if request.GET.get('q') != None:

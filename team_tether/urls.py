@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from . import consumers
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('base.urls'))
+    path("ws/room/<str:pk>/", consumers.ChatConsumer.as_asgi()),
+    path('', include('base.urls')),
 ]

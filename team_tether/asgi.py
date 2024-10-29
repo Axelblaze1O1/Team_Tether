@@ -8,9 +8,20 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
-
 from django.core.asgi import get_asgi_application
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from django.urls import path
+from . import consumers
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "team_tether.settings")
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter([
+            path("ws/room/<str:pk>/", consumers.ChatConsumer.as_asgi())
+        ]
+        )
+    ),
+})
