@@ -42,9 +42,13 @@ def logout_user(request):
 def registerUser(request):
     page = 'register'
     form = UserCreationForm()
+    
     context = {'page':page , 'form':form}
+    
     if request.method == 'POST':
+        
         form = UserCreationForm(request.POST)
+        
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -52,7 +56,10 @@ def registerUser(request):
             login(request,user)
             return redirect('home')
         else:
-             messages.error(request, 'An error occured ! Please Retry')
+             for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.capitalize()}: {error}")
+                    
     return render(request,'base/loginOrRegister.html', context )
 
 def home(request):
