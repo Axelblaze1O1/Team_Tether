@@ -1,0 +1,12 @@
+asgiref==3.7.2               # ASGI support required for Django Channels
+channels==4.1.0              # Main Channels package for WebSocket support
+daphne==4.1.2                # ASGI server used by Django Channels
+Django==4.2.1                # Django framework
+redis==5.2.0                 # For handling channels layers (optional, if Redis is used as a message broker)
+whitenoise==6.8.1            # For serving static files in production
+psycopg2==2.9.9              # PostgreSQL database support (or the database you're using)
+
+# Optional dependencies that could be helpful
+aiohttp==3.9.5               # Async HTTP client, potentially useful for async tasks
+requests==2.31.0             # For making HTTP requests (optional)
+python-dotenv==1.0.1         # For managing environment variables
